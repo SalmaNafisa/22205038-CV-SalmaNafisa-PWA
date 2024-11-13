@@ -1,5 +1,5 @@
 let db;
-const request = indexedDB.open("db_komentar");
+const request = indexedDB.open("db_komentar", 2);
 let form = document.getElementById("form-indexed-db");
 
 form.addEventListener("submit", (e) => {
