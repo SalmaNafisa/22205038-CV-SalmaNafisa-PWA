@@ -458,8 +458,6 @@
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const messaging = getMessaging(app);
-
-    const request = indexedDB.open("db_komentar");
     
     // function to save token to IndexedDB
     function saveTokenToIndexedDB(token) {
