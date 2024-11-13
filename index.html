@@ -373,7 +373,7 @@
                     </a>
                 </div>
             </div>
-            <p class="footer__copy">&copy; 2022 Mrinmoy Deka | All Rights Reserved</p>
+            <p class="footer__copy">&copy; Salma | All Rights Reserved</p>
         </div>
     </footer>
 
@@ -458,6 +458,37 @@
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const messaging = getMessaging(app);
+    
+    // function to save token to IndexedDB
+    function saveTokenToIndexedDB(token) {
+      const request = indexedDB.open("firebase-messaging", 1);
+
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains("tokens")) {
+          db.createObjectStore("tokens", { keyPath: "id" });
+        }
+      };
+
+      request.onsuccess = (event) => {
+        const db = event.target.result;
+        const transaction = db.transaction("tokens", "readwrite");
+        const store = transaction.objectStore("tokens");
+        store.put({ id: 1, token: token });
+
+        transaction.oncomplete = () => {
+          console.log("Token saved to IndexedDB successfully.");
+        };
+
+        transaction.onerror = () => {
+          console.error("Error saving token to IndexedDB.");
+             };
+      };
+
+      request.onerror = () => {
+        console.error("Error opening IndexedDB.");
+      };
+    }
 
     navigator.serviceWorker.register("service-worker.js").then((registration) => {
       getToken(messaging, {
@@ -468,22 +499,19 @@
         .then((currentToken) => {
           if (currentToken) {
             console.log("Token is: " + currentToken);
-            // Send the token to your server and update the UI if necessary
-            // ...
+            // Save token to IndexedDB
+            saveTokenToIndexedDB(currentToken);
           } else {
-            // Show permission request UI
             console.log(
               "No registration token available. Request permission to generate one."
             );
-            // ...
           }
         })
         .catch((err) => {
           console.log("An error occurred while retrieving token. ", err);
-          // ...
         });
     });
-  </script>
+</script>
 </body>
 
 </html>
