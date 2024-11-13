@@ -22,6 +22,9 @@ const urlsToCache = [
   "/assets/img/salma.png",
   "/assets/img/shopee.png",
   "/assets/img/tiktok.png",
+  "/assets/img/Sertifikat ukom Office.jpg",
+  "/assets/img/sertifikat oracel.jpg",
+  "/assets/img/sertifikat oracel 2.jpg",
 ];
 
 // Install event: PWA
